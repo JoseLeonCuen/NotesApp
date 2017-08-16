@@ -1,13 +1,96 @@
 
 body{
     background-color: red;
+    font-family: Arial, Helvetica, sans-serif;
 }
-#root{
-    width:90%;
-    background-color: blue;
+#container{
+    width:80%;
+    margin: 20px auto;
+    background-color: blue;    
+    position:relative;
+    height:50px;
+}
+#searchBar{
+    width:100%;
+    padding:15px;
+    color:white;
+    input{
+        width:150px;
+    }
+}
+#newNoteButton{
+    position: absolute;
+    right:10px;
+    font-size: 30px;
+    top:10px;
+    line-height: 29px;
+    width:30px;
+    height:30px;
+    background-color: rgb(150,150,250);
+    color:white;
+    border:none;
+    border-radius: 5px;
+    &:hover{
+        background-color: rgb(135,135,235);
+        cursor:pointer;
+    }
 }
 .note{
-    width:50px;
-    height:40px;
-    background-color: yellow;
+    @media (min-width: 1001px) {
+        width:23%;
+        margin:1%;
+    }
+    @media (max-width: 1000px) {
+        width:30%;
+        margin:1%;
+    }   
+    @media (max-width: 900px) {
+        width:45%;
+        margin:2%;
+    }    
+    @media (max-width: 600px) {
+        width:90%;
+        margin:5%;
+    }  
+    height:170px;
+    background-color:rgb(220,220,80);
+    display:inline-block;
+    .noteTop{
+        width:100%;    
+        height:30px;
+        line-height: 30px;   
+        background-color:rgb(200,200,60);
+        label{
+            padding:10px;
+        }
+        .noteOption{
+            float:right;
+            border:none;
+            width:50px;
+            height:30px;
+            background-color: transparent;
+            &:hover{
+                background-color:rgb(180,180,40);
+                cursor:pointer;
+            }
+        }
+    }
+    .noteBody{
+        position:relative;
+        padding:10px;
+        height:65%;
+        .saveButton{
+            position:absolute;
+            bottom:0;
+            right:0;
+            border: none;
+            background-color: rgb(80,180,80);
+            color:white;
+        }
+        textarea{
+            height:100%;
+            width:80%;
+            margin:0 auto;
+        }
+    }
 }

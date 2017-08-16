@@ -7,6 +7,7 @@ import Note from './Note';
 
 interface ContainerProps {
     newNote: Function;
+    noteArray: Array<any>;
 }
 interface ContainerState { }
 
@@ -17,26 +18,34 @@ export class Container extends React.Component<ContainerProps, ContainerState>{
         // this.cur = 1;
     }
     addNote() {
-        var { newNote } = this.props,
-            container = document.getElementById('container'),
-            note = document.createElement('Note');
-        container.appendChild(note);
-        console.log('click');
+        const { newNote } = this.props;
+        newNote();
     }
     render() {
         const { noteArray } = this.props;
         var notes = noteArray.map(
-            (note) =>{
-                return <Note/>
+            (note) => {
+                return <Note 
+                key={note.key}
+                title={note.title}
+                text= {note.text}
+                lock = {note.lock}
+                />
             }
         )
         return (
             <div id="container">
-                <SearchBar />    
-                {notes}            
-                <button onClick={this.addNote}>New Note</button>
+                <SearchBar />                
+                <button id="newNoteButton" onClick={this.addNote}>+</button>
+                {notes}
             </div>
         )
+    }
+}
+const mapStateToProps = (state) => {
+    return {
+        noteArray: state.noteArray,
+        search: state.search
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -47,6 +56,6 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(Container as any);

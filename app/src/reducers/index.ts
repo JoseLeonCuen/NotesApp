@@ -1,10 +1,10 @@
 import { combineReducers} from 'redux';
 import search from './searchReducer';
-import note from './noteReducer';
+import notes from './noteReducer';
 
 const Reducers = combineReducers({
     search : search,
-    note : note
+    noteArray : notes
 });
 
 export default Reducers;
