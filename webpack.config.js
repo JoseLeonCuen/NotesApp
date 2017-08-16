@@ -5,7 +5,7 @@ module.exports = {
     entry: './app/src/app.tsx',
     output: {
         filename: "[name].js",
-        path: path.join(__dirname, '279/bin/')        
+        path: path.join(__dirname, 'app/bin/')        
     },
     devtool: 'source-map',
     resolve: {
