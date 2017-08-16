@@ -11,21 +11,22 @@ interface ContainerProps {
 interface ContainerState { }
 
 export class Container extends React.Component<ContainerProps, ContainerState>{
-    constructor(){
+    constructor() {
         super();
         this.addNote = this.addNote.bind(this);
-        this.cur = 1;
+        // this.cur = 1;
     }
     addNote() {
-        // var { newNote } = this.props,
-        var container = document.getElementById('container'),
-        note = document.createElement('Note');
+        var { newNote } = this.props,
+            container = document.getElementById('container'),
+            note = document.createElement('Note');
         container.appendChild(note);
+        console.log('click');
     }
     render() {
         return (
             <div id="container">
-                <SearchBar />
+                <SearchBar />                
                 <button onClick={this.addNote}>New Note</button>
             </div>
         )

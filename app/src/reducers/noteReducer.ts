@@ -1,5 +1,5 @@
 var cur: number = 1;
-function noteState(state = { cur: cur, default: '' }, action) {
+function note(state = { cur: cur, default: '' }, action) {
     switch (action.type) {
         case 'newNote':
             return {
@@ -11,3 +11,5 @@ function noteState(state = { cur: cur, default: '' }, action) {
             return state;
     }
 }
+
+export default note;

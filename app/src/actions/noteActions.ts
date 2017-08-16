@@ -1,4 +1,3 @@
-
 function newNote() {
     return {
         type: 'newNote'

@@ -4,7 +4,7 @@ function search(state={text: ''}, action) {
         case 'search':
         return{
             text : action.text
-        }
+        };
         default:
             return state;
     }
