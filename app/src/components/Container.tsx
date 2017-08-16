@@ -24,9 +24,16 @@ export class Container extends React.Component<ContainerProps, ContainerState>{
         console.log('click');
     }
     render() {
+        const { noteArray } = this.props;
+        var notes = noteArray.map(
+            (note) =>{
+                return <Note/>
+            }
+        )
         return (
             <div id="container">
-                <SearchBar />                
+                <SearchBar />    
+                {notes}            
                 <button onClick={this.addNote}>New Note</button>
             </div>
         )
