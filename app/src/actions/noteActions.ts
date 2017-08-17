@@ -3,12 +3,6 @@ function newNote() {
         type: 'newNote'
     }
 }
-function editNote(index) {
-    return {
-        type: 'editNote',
-        index: index
-    }
-}
 function saveNote(index: number, text: string) {
     return {
         type: 'saveNote',
@@ -24,7 +18,6 @@ function deleteNote(index) {
 }
 const noteActions = {
     new: newNote,
-    edit: editNote,
     save: saveNote,
     delete: deleteNote
 }

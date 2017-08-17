@@ -13,8 +13,10 @@
   "author": "Jose Leon",
   "license": "ISC",
   "dependencies": {
+    "mousetrap": "^1.6.1",
     "node-sass": "^4.5.3",
     "react": "^15.6.1",
+    "react-dnd": "^2.4.0",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",

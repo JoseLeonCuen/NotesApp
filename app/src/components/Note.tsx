@@ -4,46 +4,59 @@ import { connect } from 'react-redux';
 import Actions from '../actions';
 
 export interface NoteProps {
-    key: number;
+    id: number;
     title: string;
     text: string;
-    lock: boolean;
+    save: Function;
+    del: Function;
 }
 export class Note extends React.Component<NoteProps, any>{
     constructor() {
-        super();        
+        super();
+        this.save = this.save.bind(this);
+        this.delete = this.delete.bind(this);
     }
-    save(){
-        
+    save(ev) {
+        const { save, id } = this.props;
+        var text = ev.target.value;                
+        save(id, text);
+    }
+    delete() {
+        const { del, id } = this.props;
+        del(id);
     }
     render() {
-        let { key,title,text,lock } = this.props;
+        var { id, title, text, lock } = this.props,
+            buttonClass = lock ? "hide" : "saveButton";
         return (
             <div className="note">
                 <div className="noteTop">
                     <label>{title}</label>
-                    <button className="noteOption">Delete</button>
-                    <button className="noteOption">Edit</button>                    
+                    <button className="noteOption" onClick={this.delete}>Delete</button>
                 </div>
                 <div className="noteBody">
-                    <textarea disabled={lock} value={text}></textarea>
-                    <button className="saveButton" onClick={this.save}>Save</button>
+                    <textarea disabled={lock} onChange={this.save} defaultValue={text}></textarea>
                 </div>
             </div>
         )
     }
 }
-const mapStateToProps = (state) => {
-    return {
-        searchText: state.text
-    }
-}
+// const mapStateToProps = (state) => {
+//     return {
+//         searchText: state.text
+//     }
+// }
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        save: (index, text) => {
+            dispatch(Actions.saveNote(index, text));
+        },
+        del: (index) => {
+            dispatch(Actions.deleteNote(index));
+        }
     }
 }
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(Note as any);

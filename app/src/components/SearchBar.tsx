@@ -21,7 +21,7 @@ export class SearchBar extends React.Component<SearchProps, any>{
         return (
             <div id="searchBar">
                 <label>Search: </label>
-                <input onChange={this.search} />
+                <input onChange={this.search} maxLength={25}/>
             </div>
         )
     }

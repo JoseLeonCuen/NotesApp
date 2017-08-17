@@ -9,7 +9,7 @@ import 'file-loader?name=[name].css!./styles.scss';
 
 import Reducers from './reducers';
 import Container from './components/Container';
-import Actions from './actions';
+
 
 let store = createStore(
     Reducers,

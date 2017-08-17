@@ -5,37 +5,49 @@ import Actions from '../actions';
 import SearchBar from './SearchBar';
 import Note from './Note';
 
+/////IMPORT THE MOUSETRAP LIBRARY///
+import * as trap from 'mousetrap';
+
 interface ContainerProps {
     newNote: Function;
     noteArray: Array<any>;
+    search: {
+        text: string;
+    }
 }
 interface ContainerState { }
+
 
 export class Container extends React.Component<ContainerProps, ContainerState>{
     constructor() {
         super();
         this.addNote = this.addNote.bind(this);
-        // this.cur = 1;
     }
     addNote() {
         const { newNote } = this.props;
         newNote();
     }
     render() {
-        const { noteArray } = this.props;
+        trap.bind('ctrl+q', this.addNote);
+        var { noteArray, search } = this.props;
+        let regex = new RegExp(search.text);
+        noteArray = noteArray.filter((card) => {
+            return card.text.match(regex);
+        });
         var notes = noteArray.map(
             (note) => {
-                return <Note 
-                key={note.key}
-                title={note.title}
-                text= {note.text}
-                lock = {note.lock}
+                return <Note
+                    key={note.id}
+                    id={note.id}
+                    title={note.title}
+                    text={note.text}
+                    lock={note.lock}
                 />
             }
         )
         return (
             <div id="container">
-                <SearchBar />                
+                <SearchBar />
                 <button id="newNoteButton" onClick={this.addNote}>+</button>
                 {notes}
             </div>
