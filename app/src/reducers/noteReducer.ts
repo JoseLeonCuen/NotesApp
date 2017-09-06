@@ -6,7 +6,6 @@ var initialState = (function () {
     var index = 0;
     while(state.length<storage.length){
     // while (index < 20) {
-        console.log(index);
         if (storage.getItem(index.toString()) != null) {
             state.push(
                 {
@@ -50,6 +49,7 @@ function notes(state = initialState, action) {
             var newState = [...state];
             index = find(newState, action.index);
             ///REMOVE ENTRY FROM LOCALSTORAGE
+            console.log('deleting');
             storage.removeItem(action.index);
             newState.splice(index, 1);
             return newState;

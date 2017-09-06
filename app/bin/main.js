@@ -27195,7 +27195,6 @@ var initialState = function () {
     var index = 0;
     while (state.length < storage.length) {
         // while (index < 20) {
-        console.log(index);
         if (storage.getItem(index.toString()) != null) {
             state.push({
                 id: index,
@@ -27237,6 +27236,7 @@ function notes(state = initialState, action) {
             var newState = [...state];
             index = find(newState, action.index);
             ///REMOVE ENTRY FROM LOCALSTORAGE
+            console.log('deleting');
             storage.removeItem(action.index);
             newState.splice(index, 1);
             return newState;
@@ -27306,7 +27306,7 @@ class Container extends React.Component {
         id = undefined;
         if (!undo) {
             let newId = noteArray.length ? noteArray[noteArray.length - 1].id + 1 : 1;
-            update('delete', newId);
+            // update('delete', newId);
         }
         newNote(text, id);
     }
@@ -27320,17 +27320,15 @@ class Container extends React.Component {
     }
     undo() {
         const { history, undo } = this.props;
-        var step = history[history.length - 1];
-        console.log("UNDO: ", step);
-        switch (step.action) {
-            case 'add':
-                this.addNote(step.text, step.id, true);
-            case 'delete':
-                this.delete(step);
-            case 'modify':
-                this.save(step);
+        if (history.length) {
+            var step = history[history.length - 1];
+            console.log("UNDO: ", step);
+            switch (step.action) {
+                case 'add':
+                    this.addNote(step.text, step.id, true);
+            }
+            undo();
         }
-        undo();
     }
     render() {
         ///ADD SHORTUCTS
@@ -33964,7 +33962,7 @@ class Note extends React.Component {
     save(ev) {
         const { save, id, update } = this.props;
         var text = ev.target.value;
-        update('modify', id, text.slice(0, -1));
+        // update('modify',id,text.slice(0,-1));
         save(id, text);
     }
     delete(ev) {

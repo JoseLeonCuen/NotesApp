@@ -55,8 +55,6 @@ export interface NoteProps {
     history: Array<any>;
     update: Function;
     undo: Function;
-    // isDragging: Boolean;
-    // connectDragSource: Function;
 }
 export class Note extends React.Component<NoteProps, any>{
     constructor() {
@@ -67,7 +65,7 @@ export class Note extends React.Component<NoteProps, any>{
     save(ev) {
         const { save, id ,update} = this.props;
         var text = ev.target.value;
-        update('modify',id,text.slice(0,-1));
+        // update('modify',id,text.slice(0,-1));
         save(id, text);
     }
     delete(ev) {

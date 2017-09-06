@@ -39,7 +39,7 @@ export class Container extends React.Component<ContainerProps, ContainerState>{
         id = undefined;
         if (!undo) {
             let newId = noteArray.length ? noteArray[noteArray.length - 1].id + 1 : 1;
-            update('delete', newId);
+            // update('delete', newId);
         }
         newNote(text, id);
     }
@@ -53,17 +53,19 @@ export class Container extends React.Component<ContainerProps, ContainerState>{
     }
     undo() {
         const { history, undo } = this.props;
-        var step = history[history.length - 1];
-        console.log("UNDO: ", step);
-        switch (step.action) {
-            case 'add':
-                this.addNote(step.text, step.id, true);
-            case 'delete':
-                this.delete(step);
-            case 'modify':
-                this.save(step);
+        if (history.length) {
+            var step = history[history.length - 1];
+            console.log("UNDO: ", step);
+            switch (step.action) {
+                case 'add':
+                    this.addNote(step.text, step.id, true);
+                // case 'delete':
+                //     this.delete(step);
+                // case 'modify':
+                //     this.save(step);
+            }
+            undo();
         }
-        undo();
     }
     render() {
         ///ADD SHORTUCTS
