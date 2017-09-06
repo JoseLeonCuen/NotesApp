@@ -16,21 +16,23 @@ body {
   #searchBar input {
     width: 150px; }
 
-#newNoteButton {
+.buttons {
   position: absolute;
   right: 10px;
-  font-size: 30px;
-  top: 10px;
-  line-height: 29px;
-  width: 30px;
-  height: 30px;
-  background-color: #9696fa;
-  color: white;
-  border: none;
-  border-radius: 5px; }
-  #newNoteButton:hover {
-    background-color: #8787eb;
-    cursor: pointer; }
+  top: 2px; }
+  .buttons button {
+    line-height: 29px;
+    font-size: 24px;
+    width: 70px;
+    height: 35px;
+    margin: 5px;
+    background-color: #9696fa;
+    color: white;
+    border: none;
+    border-radius: 5px; }
+    .buttons button:hover {
+      background-color: #8787eb;
+      cursor: pointer; }
 
 .note {
   height: 170px;
@@ -61,6 +63,8 @@ body {
     .note .noteTop label {
       padding: 10px; }
     .note .noteTop .noteOption {
+      font-family: monospace;
+      font-size: 24px;
       float: right;
       border: none;
       width: 50px;

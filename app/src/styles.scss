@@ -18,21 +18,24 @@ body{
         width:150px;
     }
 }
-#newNoteButton{
+.buttons{
     position: absolute;
     right:10px;
-    font-size: 30px;
-    top:10px;
-    line-height: 29px;
-    width:30px;
-    height:30px;
-    background-color: rgb(150,150,250);
-    color:white;
-    border:none;
-    border-radius: 5px;
-    &:hover{
-        background-color: rgb(135,135,235);
-        cursor:pointer;
+    top:2px;    
+    button{
+        line-height: 29px;
+        font-size: 24px;
+        width:70px;
+        height:35px;
+        margin:5px;
+        background-color: rgb(150,150,250);
+        color:white;
+        border:none;
+        border-radius: 5px;
+        &:hover{
+            background-color: rgb(135,135,235);
+            cursor:pointer;
+        }
     }
 }
 .note{
@@ -65,6 +68,9 @@ body{
             padding:10px;
         }
         .noteOption{
+            font-family:monospace;
+            // font-weight: bold;
+            font-size: 24px;
             float:right;
             border:none;
             width:50px;

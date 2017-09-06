@@ -1,11 +1,14 @@
 import Search from './searchActions';
 import Notes from './noteActions';
+import History from './historyActions';
 
 const Actions = {
     search : Search,
     newNote : Notes.new,
-    editNote : Notes.edit,
     saveNote : Notes.save,
-    deleteNote : Notes.delete
+    deleteNote : Notes.delete,
+    moveNote : Notes.move,
+    do : History.do,
+    undo : History.undo
 }
 export default Actions;
