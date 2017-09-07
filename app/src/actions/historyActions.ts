@@ -1,11 +1,7 @@
-function update(action,id,text){
+function update(state){
     return {
         type: 'do',
-        data:{
-            action,
-            id,
-            text
-        }        
+        state     
     }
 }
 function undo(){

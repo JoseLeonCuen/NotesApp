@@ -53,6 +53,7 @@ export interface NoteProps {
     save: Function;
     del: Function;
     history: Array<any>;
+    noteArray : Array<any>;
     update: Function;
     undo: Function;
 }
@@ -63,15 +64,14 @@ export class Note extends React.Component<NoteProps, any>{
         this.delete = this.delete.bind(this);
     }
     save(ev) {
-        const { save, id ,update} = this.props;
+        const { save, id ,update, noteArray } = this.props;
         var text = ev.target.value;
-        // update('modify',id,text.slice(0,-1));
+        update(noteArray);
         save(id, text);
     }
     delete(ev) {
-        const { del, id , update , text} = this.props;
-        // var text = ev.target.parentNode.parentNode.children[1].firstChild.value;        
-        update('add',id,text);
+        const { del, id , update, noteArray} = this.props;
+        update(noteArray);
         del(id);
     }
     render() {
@@ -91,7 +91,8 @@ export class Note extends React.Component<NoteProps, any>{
 }
 const mapStateToProps = (state) => {
     return {
-        history: state.history
+        history: state.history,
+        noteArray : state.noteArray
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -102,8 +103,8 @@ const mapDispatchToProps = (dispatch) => {
         del: (index) => {
             dispatch(Actions.deleteNote(index));
         },
-        update: (action,id,text)=>{
-            dispatch(Actions.do(action,id,text));
+        update: (state)=>{
+            dispatch(Actions.do(state));
         }
     }
 }

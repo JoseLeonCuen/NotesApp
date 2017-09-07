@@ -8,6 +8,7 @@ const Actions = {
     saveNote : Notes.save,
     deleteNote : Notes.delete,
     moveNote : Notes.move,
+    undoNote : Notes.undo,
     do : History.do,
     undo : History.undo
 }

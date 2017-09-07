@@ -2,22 +2,8 @@ var storage = window.localStorage;
 // var cur;
 
 var initialState = (function () {
-    var state = [];
-    var index = 0;
-    while(state.length<storage.length){
-    // while (index < 20) {
-        if (storage.getItem(index.toString()) != null) {
-            state.push(
-                {
-                    id: index,
-                    title: "Note " + index,
-                    text: storage.getItem(index.toString())
-                }
-            );
-        }
-        index++;
-    }
-    return state;
+    var stored = JSON.parse(storage.getItem('1'));
+    return stored;
 })();
 function notes(state = initialState, action) {
     var cur = state.length ? state[state.length - 1].id + 1 : 1;
@@ -29,30 +15,34 @@ function notes(state = initialState, action) {
     }
     switch (action.type) {
         case 'newNote':
-            let id = action.id ? action.id : cur;
+            var newState = [...state];
             var note = {
-                id: id,
+                id: cur,
                 title: "Note " + cur,
-                text: action.text,
+                text: '',
             }
-            ////CREATE NEW ENTRY INTO LOCALSTORAGE
-            storage.setItem(note.id.toString(), '');
-            return [...state, note];
+            newState.push(note);
+            ////SAVE STATE TO LOCALSTORAGE
+            storage.setItem('1', JSON.stringify(newState));
+            return newState;
         case 'saveNote':
             var newState = [...state],
                 index = find(newState, action.index);
-            ////SAVE INTO LOCALSTORAGE
-            storage.setItem(action.index.toString(), action.text);
             newState[index].text = action.text;
+            ////SAVE STATE TO LOCALSTORAGE
+            storage.setItem('1', JSON.stringify(newState));
             return newState;
         case 'deleteNote':
             var newState = [...state];
             index = find(newState, action.index);
-            ///REMOVE ENTRY FROM LOCALSTORAGE
-            console.log('deleting');
-            storage.removeItem(action.index);
             newState.splice(index, 1);
+            ////SAVE STATE TO LOCALSTORAGE
+            storage.setItem('1', JSON.stringify(newState));
             return newState;
+        case 'undoNote':
+            ////SAVE STATE TO LOCALSTORAGE
+            storage.setItem('1', JSON.stringify(action.state));
+            return action.state;
         default:
             return state;
     }

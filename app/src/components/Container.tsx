@@ -11,8 +11,6 @@ import * as trap from 'mousetrap';
 
 interface ContainerProps {
     newNote: Function;
-    save: Function;
-    del: Function;
     update: Function;
     undo: Function;
     noteArray: Array<any>;
@@ -27,45 +25,21 @@ export class Container extends React.Component<ContainerProps, ContainerState>{
     constructor() {
         super();
         this.addNote = this.addNote.bind(this);
-        this.save = this.save.bind(this);
-        this.delete = this.delete.bind(this);
         this.undo = this.undo.bind(this);
     }
     addNote(text, id, undo) {
         const { newNote, update, noteArray } = this.props;
-        console.log(text);
-        console.log(id);
-        text = '';
-        id = undefined;
-        if (!undo) {
-            let newId = noteArray.length ? noteArray[noteArray.length - 1].id + 1 : 1;
-            // update('delete', newId);
-        }
-        newNote(text, id);
-    }
-    save(data) {
-        const { save } = this.props;
-        save(data.id, data.text);
-    }
-    delete(data) {
-        const { del } = this.props;
-        del(data.id);
+        update(noteArray);
+        newNote();
     }
     undo() {
-        const { history, undo } = this.props;
+        const { history, undo } = this.props;        
         if (history.length) {
-            var step = history[history.length - 1];
-            console.log("UNDO: ", step);
-            switch (step.action) {
-                case 'add':
-                    this.addNote(step.text, step.id, true);
-                // case 'delete':
-                //     this.delete(step);
-                // case 'modify':
-                //     this.save(step);
-            }
-            undo();
+            var state = history[history.length - 1];                        
+            ///UNDOS TO THIS STATE
+            undo(state);
         }
+        console.log("STACK", history.length);
     }
     render() {
         ///ADD SHORTUCTS
@@ -93,19 +67,14 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        newNote: (text, index) => {
-            dispatch(Actions.newNote(text, index));
+        newNote: () => {
+            dispatch(Actions.newNote());
         },
-        save: (index, text) => {
-            dispatch(Actions.saveNote(index, text));
+        update: (state) => {
+            dispatch(Actions.do(state));
         },
-        del: (index) => {
-            dispatch(Actions.deleteNote(index));
-        },
-        update: (action, id, text) => {
-            dispatch(Actions.do(action, id, text));
-        },
-        undo: () => {
+        undo: (state) => {
+            dispatch(Actions.undoNote(state));
             dispatch(Actions.undo());
         }
     }

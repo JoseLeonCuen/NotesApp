@@ -7587,6 +7587,7 @@ const Actions = {
     saveNote: noteActions_1.default.save,
     deleteNote: noteActions_1.default.delete,
     moveNote: noteActions_1.default.move,
+    undoNote: noteActions_1.default.undo,
     do: historyActions_1.default.do,
     undo: historyActions_1.default.undo
 };
@@ -27191,20 +27192,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var storage = window.localStorage;
 // var cur;
 var initialState = function () {
-    var state = [];
-    var index = 0;
-    while (state.length < storage.length) {
-        // while (index < 20) {
-        if (storage.getItem(index.toString()) != null) {
-            state.push({
-                id: index,
-                title: "Note " + index,
-                text: storage.getItem(index.toString())
-            });
-        }
-        index++;
-    }
-    return state;
+    var stored = JSON.parse(storage.getItem('1'));
+    return stored;
 }();
 function notes(state = initialState, action) {
     var cur = state.length ? state[state.length - 1].id + 1 : 1;
@@ -27216,30 +27205,34 @@ function notes(state = initialState, action) {
     }
     switch (action.type) {
         case 'newNote':
-            let id = action.id ? action.id : cur;
+            var newState = [...state];
             var note = {
-                id: id,
+                id: cur,
                 title: "Note " + cur,
-                text: action.text
+                text: ''
             };
-            ////CREATE NEW ENTRY INTO LOCALSTORAGE
-            storage.setItem(note.id.toString(), '');
-            return [...state, note];
+            newState.push(note);
+            ////SAVE STATE TO LOCALSTORAGE
+            storage.setItem('1', JSON.stringify(newState));
+            return newState;
         case 'saveNote':
             var newState = [...state],
                 index = find(newState, action.index);
-            ////SAVE INTO LOCALSTORAGE
-            storage.setItem(action.index.toString(), action.text);
             newState[index].text = action.text;
+            ////SAVE STATE TO LOCALSTORAGE
+            storage.setItem('1', JSON.stringify(newState));
             return newState;
         case 'deleteNote':
             var newState = [...state];
             index = find(newState, action.index);
-            ///REMOVE ENTRY FROM LOCALSTORAGE
-            console.log('deleting');
-            storage.removeItem(action.index);
             newState.splice(index, 1);
+            ////SAVE STATE TO LOCALSTORAGE
+            storage.setItem('1', JSON.stringify(newState));
             return newState;
+        case 'undoNote':
+            ////SAVE STATE TO LOCALSTORAGE
+            storage.setItem('1', JSON.stringify(action.state));
+            return action.state;
         default:
             return state;
     }
@@ -27257,12 +27250,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function history(state = [], action) {
     switch (action.type) {
         case 'do':
-            console.log(action.data);
             var newState = [...state];
-            if (newState.length == 10) {
+            if (newState.length == 20) {
                 newState.shift();
             }
-            newState.push(action.data);
+            newState.push(action.state);
             return newState;
         case 'undo':
             var newState = [...state];
@@ -27294,41 +27286,21 @@ class Container extends React.Component {
     constructor() {
         super();
         this.addNote = this.addNote.bind(this);
-        this.save = this.save.bind(this);
-        this.delete = this.delete.bind(this);
         this.undo = this.undo.bind(this);
     }
     addNote(text, id, undo) {
         const { newNote, update, noteArray } = this.props;
-        console.log(text);
-        console.log(id);
-        text = '';
-        id = undefined;
-        if (!undo) {
-            let newId = noteArray.length ? noteArray[noteArray.length - 1].id + 1 : 1;
-            // update('delete', newId);
-        }
-        newNote(text, id);
-    }
-    save(data) {
-        const { save } = this.props;
-        save(data.id, data.text);
-    }
-    delete(data) {
-        const { del } = this.props;
-        del(data.id);
+        update(noteArray);
+        newNote();
     }
     undo() {
         const { history, undo } = this.props;
         if (history.length) {
-            var step = history[history.length - 1];
-            console.log("UNDO: ", step);
-            switch (step.action) {
-                case 'add':
-                    this.addNote(step.text, step.id, true);
-            }
-            undo();
+            var state = history[history.length - 1];
+            ///UNDOS TO THIS STATE
+            undo(state);
         }
+        console.log("STACK", history.length);
     }
     render() {
         ///ADD SHORTUCTS
@@ -27347,19 +27319,14 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        newNote: (text, index) => {
-            dispatch(actions_1.default.newNote(text, index));
+        newNote: () => {
+            dispatch(actions_1.default.newNote());
         },
-        save: (index, text) => {
-            dispatch(actions_1.default.saveNote(index, text));
+        update: state => {
+            dispatch(actions_1.default.do(state));
         },
-        del: index => {
-            dispatch(actions_1.default.deleteNote(index));
-        },
-        update: (action, id, text) => {
-            dispatch(actions_1.default.do(action, id, text));
-        },
-        undo: () => {
+        undo: state => {
+            dispatch(actions_1.default.undoNote(state));
             dispatch(actions_1.default.undo());
         }
     };
@@ -27390,39 +27357,42 @@ exports.default = search;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function newNote(text, id) {
-    // console.log("text: ",text);
-    // console.log("id: ",id);
+function newNote() {
     return {
-        type: 'newNote',
-        id: id,
-        text: text
+        type: 'newNote'
     };
 }
 function saveNote(index, text) {
     return {
         type: 'saveNote',
-        index: index,
-        text: text
+        index,
+        text
     };
 }
 function deleteNote(index) {
     return {
         type: 'deleteNote',
-        index: index
+        index
     };
 }
 function moveNote(index) {
     return {
         type: 'moveNote',
-        index: index
+        index
+    };
+}
+function undoNote(state) {
+    return {
+        type: 'undoNote',
+        state
     };
 }
 const noteActions = {
     new: newNote,
     save: saveNote,
     delete: deleteNote,
-    move: moveNote
+    move: moveNote,
+    undo: undoNote
 };
 exports.default = noteActions;
 
@@ -27434,14 +27404,10 @@ exports.default = noteActions;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function update(action, id, text) {
+function update(state) {
     return {
         type: 'do',
-        data: {
-            action,
-            id,
-            text
-        }
+        state
     };
 }
 function undo() {
@@ -27519,7 +27485,7 @@ class NoteBoard extends React.Component {
         var notes = noteArray.map(note => {
             return React.createElement(Note_1.default, { key: note.id, id: note.id, title: note.title, text: note.text });
         });
-        return React.createElement("div", { id: "notes" }, notes);
+        return React.createElement("div", { id: "noteBoard" }, notes);
     }
 }
 exports.NoteBoard = NoteBoard;
@@ -33960,15 +33926,14 @@ class Note extends React.Component {
         this.delete = this.delete.bind(this);
     }
     save(ev) {
-        const { save, id, update } = this.props;
+        const { save, id, update, noteArray } = this.props;
         var text = ev.target.value;
-        // update('modify',id,text.slice(0,-1));
+        update(noteArray);
         save(id, text);
     }
     delete(ev) {
-        const { del, id, update, text } = this.props;
-        // var text = ev.target.parentNode.parentNode.children[1].firstChild.value;        
-        update('add', id, text);
+        const { del, id, update, noteArray } = this.props;
+        update(noteArray);
         del(id);
     }
     render() {
@@ -33979,7 +33944,8 @@ class Note extends React.Component {
 exports.Note = Note;
 const mapStateToProps = state => {
     return {
-        history: state.history
+        history: state.history,
+        noteArray: state.noteArray
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -33990,8 +33956,8 @@ const mapDispatchToProps = dispatch => {
         del: index => {
             dispatch(actions_1.default.deleteNote(index));
         },
-        update: (action, id, text) => {
-            dispatch(actions_1.default.do(action, id, text));
+        update: state => {
+            dispatch(actions_1.default.do(state));
         }
     };
 };

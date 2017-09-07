@@ -1,20 +1,37 @@
+html, body {
+  height: 95%; }
+
 body {
-  background-color: red;
+  background-color: #e6e6e6;
   font-family: Arial, Helvetica, sans-serif; }
+
+#root {
+  height: 100%; }
 
 #container {
   width: 80%;
+  height: 100%;
   margin: 20px auto;
-  background-color: blue;
-  position: relative;
-  height: 50px; }
+  position: relative; }
 
 #searchBar {
   width: 100%;
+  box-sizing: border-box;
   padding: 15px;
+  font-size: 18px;
+  background-color: #64c8cd;
   color: white; }
   #searchBar input {
-    width: 150px; }
+    width: 200px; }
+    @media (max-width: 800px) {
+      #searchBar input {
+        width: 40%; } }
+
+#noteBoard {
+  background-color: white;
+  height: 100%;
+  border: 1px solid #64c8cd;
+  overflow: auto; }
 
 .buttons {
   position: absolute;
@@ -26,62 +43,77 @@ body {
     width: 70px;
     height: 35px;
     margin: 5px;
-    background-color: #9696fa;
+    background-color: #649696;
     color: white;
     border: none;
     border-radius: 5px; }
+    @media (max-width: 800px) {
+      .buttons button {
+        width: 50px;
+        font-size: 16px; } }
     .buttons button:hover {
-      background-color: #8787eb;
+      background-color: #78aaaa;
       cursor: pointer; }
 
 .note {
-  height: 170px;
-  background-color: #dcdc50;
+  background-color: #f0f0f0;
+  border: 1px solid #64c8cd;
   display: inline-block;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3); }
-  @media (min-width: 1001px) {
+  box-sizing: border-box;
+  border-radius: 0 0 10px 10px; }
+  @media (min-width: 1451px) {
     .note {
       width: 23%;
-      margin: 1%; } }
-  @media (max-width: 1000px) {
+      margin: 1%;
+      height: 220px; } }
+  @media (max-width: 1450px) {
     .note {
       width: 30%;
-      margin: 1%; } }
-  @media (max-width: 900px) {
+      margin: 1%;
+      height: 220px; } }
+  @media (max-width: 1150px) {
     .note {
       width: 45%;
-      margin: 2%; } }
-  @media (max-width: 600px) {
+      margin: 2%;
+      height: 230px; } }
+  @media (max-width: 800px) {
     .note {
       width: 90%;
-      margin: 5%; } }
+      margin: 5%;
+      height: 240px; } }
   .note .noteTop {
     width: 100%;
     height: 30px;
+    font-size: 22px;
     line-height: 30px;
-    background-color: #c8c83c; }
+    color: white;
+    background-color: #64c8cd; }
     .note .noteTop label {
       padding: 10px; }
     .note .noteTop .noteOption {
       font-family: monospace;
-      font-size: 24px;
+      font-size: 20px;
       float: right;
+      color: white;
+      border-radius: 13px;
       border: none;
-      width: 50px;
-      height: 30px;
-      background-color: transparent; }
+      margin: 1px 5px;
+      width: 26px;
+      height: 26px;
+      background-color: #649696; }
       .note .noteTop .noteOption:hover {
-        background-color: #b4b428;
+        background-color: #78aaaa;
         cursor: pointer; }
   .note .noteBody {
     position: relative;
-    padding: 10px;
+    padding: 10px 5px;
     height: 65%; }
     .note .noteBody textarea {
       height: 100%;
       width: 95%;
       resize: none;
       font-family: Arial, Helvetica, sans-serif;
+      font-size: 24px;
       margin: 0 auto;
       background-color: transparent;
       border: none; }

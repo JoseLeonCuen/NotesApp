@@ -35,7 +35,7 @@ export class NoteBoard extends React.Component<NoteBoardProps, any>{
             }
         )
         return (
-            <div id="notes">
+            <div id="noteBoard">
                 {notes}
             </div>
         )

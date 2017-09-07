@@ -1,35 +1,38 @@
-function newNote(text:string,id?:number) {
-    // console.log("text: ",text);
-    // console.log("id: ",id);
+function newNote() {
     return {
-        type: 'newNote',
-        id:id,
-        text:text
+        type: 'newNote',        
     }
 }
 function saveNote(index: number, text: string) {
     return {
         type: 'saveNote',
-        index: index,
-        text: text
+        index,
+        text
     }
 }
 function deleteNote(index) {
     return {
         type: 'deleteNote',
-        index: index
+        index
     }
 }
 function moveNote(index){
     return{
         type:'moveNote',
-        index:index
+        index
+    }
+}
+function undoNote(state){
+    return{
+        type:'undoNote',
+        state
     }
 }
 const noteActions = {
     new: newNote,
     save: saveNote,
     delete: deleteNote,
-    move : moveNote
+    move : moveNote,
+    undo : undoNote
 }
 export default noteActions;

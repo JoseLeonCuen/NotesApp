@@ -1,12 +1,11 @@
 function history(state = [], action) {
     switch (action.type) {
         case 'do':
-            console.log(action.data);
             var newState = [...state];
-            if (newState.length == 10) {
+            if (newState.length == 20) {
                 newState.shift();
             }
-            newState.push(action.data);
+            newState.push(action.state);
             return newState;
         case 'undo':
             var newState = [...state];
